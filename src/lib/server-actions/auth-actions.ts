@@ -4,6 +4,8 @@ import { z } from "zod";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { FormSchema } from "../types";
 import { cookies } from "next/headers";
+import * as dotenv from "dotenv";
+dotenv.config({ path: ".env" });
 
 export async function actionLoginUser({
   email,

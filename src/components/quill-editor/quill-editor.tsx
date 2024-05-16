@@ -512,9 +512,9 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     };
   }, [fileId, quill, supabase, user]);
 
-  if (collaborators) {
-    console.log("collaborators", collaborators);
-  }
+  // if (collaborators) {
+  //   console.log("collaborators", collaborators);
+  // }
 
   return (
     <>
