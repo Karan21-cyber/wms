@@ -31,8 +31,10 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       {
         path: "/api/socket/io",
         addTrailingSlash: false,
+        transport: ["websocket", "polling"], // added due to error occur in server
       }
     );
+
     socketInstance.on("connect", () => {
       setIsConnected(true);
     });
