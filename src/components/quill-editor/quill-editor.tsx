@@ -590,7 +590,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
               <button onClick={() => setShowChat(!showChat)}>ChatIcons</button>
               {showChat && (
                 <div className="absolute top-8 right-3 w-[500px] z-[99]">
-                  <MessageComponents />
+                  <MessageComponents user={user} messages={""} />
                 </div>
               )}
             </div>
