@@ -31,13 +31,19 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
       });
       // here we listen for changes and emit them to the room specified by the fileId and deltas means data changes
       s.on("send-changes", (deltas, fileId) => {
-        console.log("server CHANGE");
+        console.log("CHANGE server");
         s.to(fileId).emit("receive-changes", deltas, fileId);
       });
+
       // here we listen for cursor move and emit them to the room specified by the fileId and cursorId means user id
       s.on("send-cursor-move", (range, fileId, cursorId) => {
         console.log("server CURSOR");
         s.to(fileId).emit("receive-cursor-move", range, fileId, cursorId);
+      });
+
+      s.on("send-message", (message, fileId, email) => {
+        
+        s.to(fileId).emit("receive-message", message, fileId);
       });
     });
     res.socket.server.io = io;
