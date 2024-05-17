@@ -41,6 +41,7 @@ import { useSupabaseUser } from "@/lib/providers/supabase-user-provider";
 import { MessageComponents } from "./message-components";
 import { Content } from "next/font/google";
 import { set } from "zod";
+import Quill from "quill";
 
 interface QuillEditorProps {
   dirDetails: File | Folder | workspace;
@@ -89,6 +90,8 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   const [deletingBanner, setDeletingBanner] = useState(false);
   const [saving, setSaving] = useState(false);
   const [localCursors, setLocalCursors] = useState<any>([]);
+
+  const [oldContent, setOldContent] = useState<any>(null);
 
   const details = useMemo(() => {
     let selectedDir;
@@ -183,6 +186,8 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       setQuill(q);
     }
   }, []);
+
+  // console.log("quill wrapper", Quill);
 
   const restoreFileHandler = async () => {
     if (dirType === "file") {
@@ -308,7 +313,9 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         }
         if (!workspaceId || quill === null) return;
         if (!selectedDir[0].data) return;
-        quill.setContents(JSON.parse(selectedDir[0].data || ""));
+        quill.setContents(JSON.parse(selectedDir[0]?.data || ""));
+
+        setOldContent(JSON.parse(selectedDir[0]?.data || ""));
         dispatch({
           type: "UPDATE_FILE",
           payload: {
@@ -331,6 +338,8 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         if (quill === null) return;
         if (!selectedDir[0].data) return;
         quill.setContents(JSON.parse(selectedDir[0].data || ""));
+
+        setOldContent(JSON.parse(selectedDir[0]?.data || ""));
         dispatch({
           type: "UPDATE_FOLDER",
           payload: {
@@ -348,6 +357,8 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         if (!selectedDir[0] || quill === null) return;
         if (!selectedDir[0].data) return;
         quill.setContents(JSON.parse(selectedDir[0].data || ""));
+
+        setOldContent(JSON.parse(selectedDir[0]?.data || ""));
         dispatch({
           type: "UPDATE_WORKSPACE",
           payload: {
@@ -404,9 +415,23 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       if (source !== "user") return;
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
       setSaving(true);
-      const contents = quill.getContents();
 
+      const contents = quill.getContents();
+      // this code is to see the logs of the changes
+      console.log("user", user?.email);
+      console.log("fileId", fileId);
       console.log("contents", contents);
+
+      console.log("oldContent", oldContent);
+
+      const contentChagned: any = JSON.stringify(contents);
+
+      const logContent = contentChagned - oldContent;
+
+      console.log("logContent", logContent);
+
+      console.log("oldContent length", oldContent?.ops?.length);
+      console.log("newContent length", newContent?.ops?.length);
 
       const quillLength = quill.getLength();
       saveTimerRef.current = setTimeout(async () => {
@@ -521,11 +546,9 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     };
   }, [fileId, quill, supabase, user]);
 
-  if (collaborators) {
-    console.log("collaborators", collaborators);
-  }
-
-
+  // if (collaborators) {
+  //   console.log("collaborators", collaborators);
+  // }
 
   return (
     <>

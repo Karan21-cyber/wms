@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import Logo from "../../../public/cypresslogo.svg";
 
 function SigupBanner() {
   return (
@@ -20,7 +19,7 @@ function SigupBanner() {
           justify-center
           items-center"
       >
-        <Image src={Logo} alt="space-world Logo" width={50} height={50} />
+        <Image src={""} alt="space-world Logo" width={50} height={50} />
         <span
           className="font-semibold
           text-white text-4xl first-letter:ml-2"
