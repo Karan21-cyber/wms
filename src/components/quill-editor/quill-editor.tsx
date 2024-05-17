@@ -431,7 +431,6 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       console.log("logContent", logContent);
 
       console.log("oldContent length", oldContent?.ops?.length);
-      console.log("newContent length", newContent?.ops?.length);
 
       const quillLength = quill.getLength();
       saveTimerRef.current = setTimeout(async () => {
