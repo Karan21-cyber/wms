@@ -4,6 +4,7 @@ import { Server as ServerIO } from "socket.io";
 import { NextApiRequest } from "next";
 import * as dotenv from "dotenv";
 import { getURL } from "@/lib/utils";
+import e from "cors";
 dotenv.config({ path: ".env" });
 
 export const config = {
@@ -42,8 +43,17 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
       });
 
       s.on("send-message", (message, fileId, email) => {
-        
-        s.to(fileId).emit("receive-message", message, fileId);
+        console.log("server MESSAGE", message, message);
+        console.log("server fileId", fileId);
+        console.log("server userId", email);
+
+        const data = {
+          email: email,
+          message: message,
+          fileId: fileId,
+        };
+
+        s.to(fileId).emit("receive-message", data);
       });
     });
     res.socket.server.io = io;

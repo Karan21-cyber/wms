@@ -1,39 +1,54 @@
 "use client";
+import { useSocket } from "@/lib/providers/socket-provider";
 import clsx from "clsx";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 export const MessageComponents = ({
   user,
-  messages,
+  fileId,
 }: {
   user: any;
-  messages?: any;
+  fileId?: any;
 }) => {
-  // const [messages, setMessages] = React.useState([]);
-
+  console.log("fileId", fileId);
   console.log("user", user);
+  const { socket, isConnected } = useSocket();
+  const [messagess, setMessagess] = useState<any>([]);
+  const [message, setMessage] = useState<any>("");
 
-  const message: any = [
-    {
-      email: "karandk536@gmail.com",
-      message:
-        "hi aitc hi karanuagsdf kjgask jdgfhakjsdfga kjsd gfahsgdf kjah hi karanuagsdf kjgask jdgfhakjsdfga kjsd gfahsgdf kjah",
-    },
-    {
-      email: "karan.chaudhary@aitc.ai",
-      message:
-        "hi karanuagsdf kjgask jdgfhakjsdfga kjsd gfahsgdf kjah hi karanuagsdf kjgask jdgfhakjsdfga kjsd gfahsgdf kjah",
-    },
-    { email: "karandk536@gmail.com", message: "change this docs" },
-    { email: "karan.chaudhary@aitc.ai", message: "this is message" },
-    { email: "karandk536@gmail.com", message: "this is new message " },
-    { email: "karan.chaudhary@aitc.ai", message: "I have changed the things " },
-    { email: "karan.chaudhary@aitc.ai", message: "I am new users" },
-  ];
+  useEffect(() => {
+    if (socket === null || !fileId) return;
+    socket.emit("create-room", fileId);
+  }, [socket, fileId]);
 
+  useEffect(() => {
+    if (socket === null) return;
+    const socketHandler = (data: any) => {
+      if (data?.fileId !== fileId) return;
+      setMessagess((prev: any) => [...prev, data]);
+    };
+    // listen for changes from server
+    socket.on("receive-message", socketHandler);
+    return () => {
+      socket.off("receive-message", socketHandler);
+    };
+    
+  }, [socket, message]);
+
+  const sendMessage = () => {
+    if (socket === null) return;
+    setMessagess((prev: any) => [
+      ...prev,
+      { email: user?.email, message, fileId },
+    ]);
+    socket.emit("send-message", message, fileId, user?.email);
+    setMessage("");
+  };
+
+  console.log("messages", messagess);
   return (
-    <div className="p-4 w-full relative flex flex-col gap-6  text-black bg-gray-300 rounded">
+    <div className="p-4 w-full relative flex flex-col gap-6 text-black bg-gray-300 rounded">
       <div className="sticky w-full">
         <p className="text-sm max-w-fit text-blueshade4">
           Message your corresponding collaborators
@@ -41,7 +56,7 @@ export const MessageComponents = ({
       </div>
 
       <div className="h-[500px] overflow-y-scroll no-scrollbar bg-white text-black flex flex-col gap-4 rounded">
-        {message?.map((msg: any, index: number) => (
+        {messagess?.map((msg: any, index: number) => (
           <div
             key={index}
             className={clsx(
@@ -49,7 +64,6 @@ export const MessageComponents = ({
               user?.email === msg?.email && "justify-end"
             )}
           >
-            {" "}
             <div
               className={clsx(
                 "max-w-[60%] w-auto flex flex-col gap-1 rounded-lg"
@@ -73,8 +87,9 @@ export const MessageComponents = ({
         ))}
       </div>
       <form
-        onSubmit={(e) => {
-          console.log("submit");
+        onSubmit={(event) => {
+          event.preventDefault();
+          sendMessage();
         }}
         className="rounded-lg flex flex-row gap-2 items-center px-2"
       >
@@ -83,7 +98,12 @@ export const MessageComponents = ({
             <input
               type="text"
               id="message"
-              className="common-input w-full h-[42px] outline-none text-black px-4 text-sm  mt-2 mb-1.5 rounded-lg bg-blueshade8"
+              onChange={(e) => {
+                e.preventDefault();
+                setMessage(e.target.value);
+              }}
+              value={message}
+              className="common-input w-full h-[42px] outline-none text-black px-4 text-sm mt-2 mb-1.5 rounded-lg bg-blueshade8"
               placeholder="Type your message here"
             />
           </div>

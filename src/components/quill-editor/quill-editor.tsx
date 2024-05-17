@@ -40,6 +40,7 @@ import { useSocket } from "@/lib/providers/socket-provider";
 import { useSupabaseUser } from "@/lib/providers/supabase-user-provider";
 import { MessageComponents } from "./message-components";
 import { Content } from "next/font/google";
+import { set } from "zod";
 
 interface QuillEditorProps {
   dirDetails: File | Folder | workspace;
@@ -84,9 +85,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     { id: string; email: string; avatarUrl: string }[]
   >([]);
 
-  const [message, setMessage] = useState("");
   const [showChat, setShowChat] = useState(false);
-
   const [deletingBanner, setDeletingBanner] = useState(false);
   const [saving, setSaving] = useState(false);
   const [localCursors, setLocalCursors] = useState<any>([]);
@@ -375,6 +374,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         }
       }
     };
+    // listen for cursor changes from server
     socket.on("receive-cursor-move", socketHandler);
     return () => {
       socket.off("receive-cursor-move", socketHandler);
@@ -391,6 +391,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   useEffect(() => {
     if (quill === null || socket === null || !fileId || !user) return;
 
+    //sending the cursor position to the server
     const selectionChangeHandler = (cursorId: string) => {
       return (range: any, oldRange: any, source: any) => {
         if (source === "user" && cursorId) {
@@ -398,6 +399,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         }
       };
     };
+
     const quillHandler = (delta: any, oldDelta: any, source: any) => {
       if (source !== "user") return;
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
@@ -447,6 +449,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         }
         setSaving(false);
       }, 850);
+      // send changes to server
       socket.emit("send-changes", delta, fileId);
     };
     quill.on("text-change", quillHandler);
@@ -466,6 +469,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         quill.updateContents(deltas);
       }
     };
+    // listen for changes from server
     socket.on("receive-changes", socketHandler);
     return () => {
       socket.off("receive-changes", socketHandler);
@@ -520,6 +524,8 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   if (collaborators) {
     console.log("collaborators", collaborators);
   }
+
+
 
   return (
     <>
@@ -597,7 +603,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
               </button>
               {showChat && (
                 <div className="absolute top-8 right-3 w-[500px] z-[99]">
-                  <MessageComponents user={user} messages={""} />
+                  <MessageComponents user={user} fileId={fileId} />
                 </div>
               )}
             </div>
