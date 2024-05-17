@@ -1,6 +1,7 @@
 "use client";
 import { useAppState } from "@/lib/providers/state-provider";
 import { File, Folder, workspace } from "@/lib/supabase/supabase.types";
+import { FcCollaboration } from "react-icons/fc";
 import React, {
   useCallback,
   useEffect,
@@ -38,6 +39,7 @@ import { XCircleIcon } from "lucide-react";
 import { useSocket } from "@/lib/providers/socket-provider";
 import { useSupabaseUser } from "@/lib/providers/supabase-user-provider";
 import { MessageComponents } from "./message-components";
+import { Content } from "next/font/google";
 
 interface QuillEditorProps {
   dirDetails: File | Folder | workspace;
@@ -401,6 +403,9 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
       setSaving(true);
       const contents = quill.getContents();
+
+      console.log("contents", contents);
+
       const quillLength = quill.getLength();
       saveTimerRef.current = setTimeout(async () => {
         if (contents && quillLength !== 1 && fileId) {
@@ -513,8 +518,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   }, [fileId, quill, supabase, user]);
 
   // if (collaborators) {
-  //   console.log("collaborators", collaborators);
-  // }
+  //   console.log("collaborators", collaborators);  // }
 
   return (
     <>
@@ -587,7 +591,9 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
           <div>{breadCrumbs}</div>
           <div className="flex items-center gap-4 px-4">
             <div className="relative ">
-              <button onClick={() => setShowChat(!showChat)}>ChatIcons</button>
+              <button className="mr-2" onClick={() => setShowChat(!showChat)}>
+                <FcCollaboration size={30} />
+              </button>
               {showChat && (
                 <div className="absolute top-8 right-3 w-[500px] z-[99]">
                   <MessageComponents user={user} messages={""} />
