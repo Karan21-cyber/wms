@@ -115,7 +115,7 @@ body {
 }
 
 .ql-toolbar {
-  @apply flex flex-wrap items-center border-2 border-gray-400  justify-center  z-40 sticky top-0  left-1 right-1;
+  @apply flex flex-wrap items-center border-2 border-gray-400 bg-slate-200  justify-center  z-40 sticky top-0  left-1 right-1;
 }
 
 .ql-formats {
