@@ -1,0 +1,9 @@
+{
+  "rewrites": [{ "source": "/api/socket/io", "destination": "/api/socket/io" }],
+  "functions": {
+    "api/socket": {
+      "memory": 512,
+      "maxDuration": 10
+    }
+  }
+}
