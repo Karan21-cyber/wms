@@ -4,7 +4,7 @@
 import { useAppState } from "@/lib/providers/state-provider";
 import { File, Folder, workspace } from "@/lib/supabase/supabase.types";
 import { FcCollaboration } from "react-icons/fc";
-import _, { add } from "lodash";
+import _, { add, get } from "lodash";
 import React, {
   useCallback,
   useEffect,
@@ -15,11 +15,13 @@ import React, {
 import "quill/dist/quill.snow.css";
 import { Button } from "../ui/button";
 import {
+  createLogs,
   deleteFile,
   deleteFolder,
   findUser,
   getFileDetails,
   getFolderDetails,
+  getLogs,
   getWorkspaceDetails,
   updateFile,
   updateFolder,
@@ -95,6 +97,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   const [newContent, setNewContent] = useState<any>(null);
   const [newData, setNewData] = useState<any[]>();
   const [newChangedData, setNewChangedData] = useState<any>(null);
+  const [logList, setLogList] = useState<any>(null);
 
   const details = useMemo(() => {
     let selectedDir;
@@ -166,6 +169,25 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
 
     return `${workspaceBreadCrumb} ${folderBreadCrumb} ${fileBreadCrumb}`;
   }, [state, pathname, workspaceId]);
+
+  const fetchLogs = async () => {
+    try {
+      const response = await getLogs(fileId);
+      if (!response) return;
+      console.log("logs", response);
+      setLogList(response?.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    if (fileId) {
+      fetchLogs();
+    }
+  }, [fileId]);
+
+  console.log("logList", logList);
 
   // Quill Editor setup and initialization with the wrapperRef callback function to create the editor instance and set the quill state
   const wrapperRef = useCallback(async (wrapper: any) => {
@@ -555,9 +577,22 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     };
   }, [fileId, quill, supabase, user]);
 
+  const newLogCreate = async (content: any, fileId: string, userId: string) => {
+    try {
+      const { error, data } = await createLogs(content, userId, fileId);
+      if (error) {
+        console.error(error);
+      } else {
+        fetchLogs();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     if (newChangedData?.data) {
-      console.log("new addedData", newChangedData);
+      newLogCreate(newChangedData?.data, fileId, user?.id as string);
       setNewData([]);
       setNewChangedData(null);
     }

@@ -5,7 +5,7 @@ import { NextApiRequest } from "next";
 import * as dotenv from "dotenv";
 import { getURL } from "@/lib/utils";
 import e from "cors";
-import { createMessage } from "@/lib/supabase/queries";
+import { createLogs, createMessage } from "@/lib/supabase/queries";
 dotenv.config({ path: ".env" });
 
 export const config = {
@@ -59,6 +59,8 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
 
         s.to(fileId).emit("receive-message", data);
       });
+
+   
     });
     res.socket.server.io = io;
   }

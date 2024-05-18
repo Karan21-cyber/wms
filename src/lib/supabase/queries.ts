@@ -4,7 +4,7 @@ import { files, folders, users, workspaces } from "../../../migrations/schema";
 import db from "./db";
 import { File, Folder, Subscription, User, workspace } from "./supabase.types";
 import { and, eq, ilike, notExists } from "drizzle-orm";
-import { collaborators, messages } from "./schema";
+import { collaborators, logs, messages } from "./schema";
 import { revalidatePath } from "next/cache";
 
 export const createWorkspace = async (workspace: workspace) => {
@@ -400,7 +400,51 @@ export const getMessages = async (fileId: string) => {
       .where(eq(messages?.fileId, fileId))
       .orderBy(messages?.createdAt);
 
-    console.log("Messages", response);
+    return { data: response, error: null };
+  } catch (error) {
+    return { data: [], error: "Error" };
+  }
+};
+export const createLogs = async (
+  content: string,
+  userId: string,
+  fileId: string
+) => {
+  try {
+    const newLog = {
+      timestamp: new Date().toISOString(), // Assuming this field corresponds to the timestamp column in your logs table
+      fileId: fileId,
+      userId: userId,
+      content: content,
+    };
+    await db.insert(logs).values(newLog);
+    return { data: null, error: null };
+  } catch (error) {
+    console.error("Error inserting log:", error);
+    return { data: null, error: "Error inserting log" };
+  }
+};
+
+export const getLogs = async (fileId: string) => {
+  const isValid = validate(fileId);
+  if (!isValid) {
+    data: [];
+    error: "Error";
+  }
+  try {
+    const response = await db
+      .select({
+        logId: logs?.id,
+        createdAt: logs?.timestamp,
+        content: logs?.content,
+        userId: logs?.userId,
+        fileId: logs?.fileId,
+        email: users?.email, // Assuming you want to include the email from the users table
+      })
+      .from(logs)
+      .innerJoin(users, eq(logs?.userId, users?.id))
+      .where(eq(logs?.fileId, fileId))
+      .orderBy(logs?.timestamp);
 
     return { data: response, error: null };
   } catch (error) {
