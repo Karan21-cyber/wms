@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import { useAppState } from "@/lib/providers/state-provider";
 import { File, Folder, workspace } from "@/lib/supabase/supabase.types";
 import { FcCollaboration } from "react-icons/fc";
+import _ from "lodash";
 import React, {
   useCallback,
   useEffect,
@@ -40,8 +42,6 @@ import { useSocket } from "@/lib/providers/socket-provider";
 import { useSupabaseUser } from "@/lib/providers/supabase-user-provider";
 import { MessageComponents } from "./message-components";
 import { Content } from "next/font/google";
-import { set } from "zod";
-import Quill from "quill";
 
 interface QuillEditorProps {
   dirDetails: File | Folder | workspace;
@@ -92,6 +92,8 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   const [localCursors, setLocalCursors] = useState<any>([]);
 
   const [oldContent, setOldContent] = useState<any>(null);
+  const [newContent, setNewContent] = useState<any>(null);
+  const [differences, setDifferences] = useState<any>(null);
 
   const details = useMemo(() => {
     let selectedDir;
@@ -411,6 +413,32 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       };
     };
 
+    // const findDifferences = (
+    //   oldcontentChanged: string,
+    //   contentChagned: string
+    // ) => {
+    //   const oldArray = contentToArray(oldcontentChanged);
+    //   const newArray = contentToArray(contentChagned);
+
+    //   const removed = _.difference(oldArray, newArray);
+
+    //   console.log("removed", removed);
+    //   const added = _.difference(newArray, oldArray);
+    //   console.log("added", added);
+
+    //   const diffArray = newArray?.map((line: unknown) => {
+    //     if (added?.includes(line)) {
+    //       return { value: line, type: "added" };
+    //     }
+    //     if (removed?.includes(line)) {
+    //       return { value: line, type: "removed" };
+    //     }
+    //     return { value: line, type: "common" };
+    //   });
+
+    //   console.log("diffArray", diffArray);
+    // };
+
     const quillHandler = (delta: any, oldDelta: any, source: any) => {
       if (source !== "user") return;
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
@@ -418,19 +446,24 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
 
       const contents = quill.getContents();
       // this code is to see the logs of the changes
-      console.log("user", user?.email);
-      console.log("fileId", fileId);
-      console.log("contents", contents);
+      const newContent = JSON.stringify(contents);
 
-      console.log("oldContent", oldContent);
+      const oldcontentChanged = JSON.stringify(oldContent) as string;
+      const contentChagned = newContent as string;
 
-      const contentChagned: any = JSON.stringify(contents);
+      setOldContent(oldcontentChanged);
+      setNewContent(contentChagned);
 
-      const logContent = contentChagned - oldContent;
+      console.log("new contents", contentChagned);
+      console.log("old Content", oldcontentChanged);
 
-      console.log("logContent", logContent);
+      // findDifferences(oldcontentChanged, contentChagned);
 
-      console.log("oldContent length", oldContent?.ops?.length);
+      // const logContent = contentChagned - oldcontentChanged;
+
+      // console.log("logContent", logContent?.ops?.length);
+
+      // console.log("oldContent length", oldContent?.ops?.length);
 
       const quillLength = quill.getLength();
       saveTimerRef.current = setTimeout(async () => {
@@ -472,7 +505,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
           }
         }
         setSaving(false);
-      }, 850);
+      }, 1000);
       // send changes to server
       socket.emit("send-changes", delta, fileId);
     };
@@ -544,10 +577,6 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       supabase.removeChannel(room);
     };
   }, [fileId, quill, supabase, user]);
-
-  // if (collaborators) {
-  //   console.log("collaborators", collaborators);
-  // }
 
   return (
     <>
