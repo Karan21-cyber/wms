@@ -66,7 +66,7 @@ const FoldersDropdownList: React.FC<FoldersDropdownListProps> = ({
       data: null,
       id: v4(),
       createdAt: new Date().toISOString(),
-      title: "New Folder",
+      title: "Untitled",
       iconId: "📁",
       inTrash: null,
       workspaceId,

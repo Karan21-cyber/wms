@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+import { CommonBreadCrum } from "@/components/bread-crum/common-brecrum";
 import LottieDashboard from "@/components/dashboard-setup/lottie-animation";
 import { getWorkspaceDetails } from "@/lib/supabase/queries";
 import Image from "next/image";
@@ -8,10 +9,11 @@ import React from "react";
 const Workspace = async ({ params }: { params: { workspaceId: string } }) => {
   const { data, error } = await getWorkspaceDetails(params.workspaceId);
   if (error || !data.length) redirect("/dashboard");
+
   return (
     <div className="h-screen flex flex-col gap-4">
       <div className="h-[10vh] flex  items-center px-4 py-1 border">
-        {data[0]?.logo && (
+        {/* {data[0]?.logo && (
           <Image
             src={data[0]?.logo as string}
             alt="Workspace Logo"
@@ -20,10 +22,9 @@ const Workspace = async ({ params }: { params: { workspaceId: string } }) => {
             loading="lazy"
             className="rounded-full"
           />
-        )}
-        <h1 className="text-2xl font-semibold text-center text-violet-800">
-          {data[0]?.title}
-        </h1>
+        )} */}
+
+        <CommonBreadCrum />
       </div>
 
       <div className="h-[80vh] p-6 flex flex-col gap-3 justify-center items-center">

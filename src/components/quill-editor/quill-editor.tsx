@@ -43,6 +43,8 @@ import { XCircleIcon } from "lucide-react";
 import { useSocket } from "@/lib/providers/socket-provider";
 import { useSupabaseUser } from "@/lib/providers/supabase-user-provider";
 import { MessageComponents } from "./message-components";
+import { RxActivityLog } from "react-icons/rx";
+import { LogComponent } from "./log-compoenent";
 
 interface QuillEditorProps {
   dirDetails: File | Folder | workspace;
@@ -671,20 +673,12 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
             <div className="relative ">
               {logList?.length > 0 && (
                 <button className="mr-2" onClick={() => setShowLog(!showLog)}>
-                  Log
+                  <RxActivityLog size={24} className="text-violet-900" />
                 </button>
               )}
               {showLog && (
                 <div className="absolute top-8 right-3 w-[500px] z-[99]">
-                  <div className="flex flex-col gap-2 bg-white shadow-2xl p-6">
-                    {logList?.map((log: any, index: number) => (
-                      <div key={index} className="flex flex-col gap-2">
-                        <span>{log?.content}</span>
-                        <span>{log?.email}</span>
-                        <span></span>
-                      </div>
-                    ))}
-                  </div>
+                  <LogComponent logList={logList} />
                 </div>
               )}
             </div>
