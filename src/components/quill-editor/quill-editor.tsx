@@ -91,6 +91,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   const [showChat, setShowChat] = useState(false);
   const [deletingBanner, setDeletingBanner] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [showLog, setShowLog] = useState(false);
   const [localCursors, setLocalCursors] = useState<any>([]);
 
   const [oldContent, setOldContent] = useState<any>(null);
@@ -667,7 +668,31 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         p-8"
         >
           <div>{breadCrumbs}</div>
+
           <div className="flex items-center gap-4 px-4">
+            {/* logs */}
+            <div className="relative ">
+              {logList?.length > 0 && (
+                <button className="mr-2" onClick={() => setShowLog(!showLog)}>
+                  Log
+                </button>
+              )}
+              {showLog && (
+                <div className="absolute top-8 right-3 w-[500px] z-[99]">
+                  <div className="flex flex-col gap-2 bg-white shadow-2xl p-6">
+                    {logList?.map((log: any, index: number) => (
+                      <div key={index} className="flex flex-col gap-2">
+                        <span>{log?.content}</span>
+                        <span>{log?.email}</span>
+                        <span></span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* messages */}
             <div className="relative ">
               <button className="mr-2" onClick={() => setShowChat(!showChat)}>
                 <FcCollaboration size={30} />
