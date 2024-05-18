@@ -98,6 +98,18 @@ const Signup = () => {
         <div className="part2-container relative w-full flex  justify-center items-center flex-col bg-[#FFF]">
           <div className="part1-container relative w-full lg:w-[50%] flex px-[50px] justify-between items-center flex-col bg-[#FFF]">
             <div className="form-wrapper  flex flex-col gap-6 ">
+              <Link
+                href="/"
+                className="w-full flex justify-center items-center"
+              >
+                <Image
+                  src={"/logo.png"}
+                  alt="space-world Logo"
+                  className=""
+                  width={150}
+                  height={50}
+                />
+              </Link>
               <h1
                 className={`form-highlight  text-center text-4xl md:text-6xl font-bold -tracking-[1.34px] `}
               >
@@ -187,18 +199,17 @@ const Signup = () => {
 
                     {submitError && <FormMessage>{submitError}</FormMessage>}
 
-                    <span className="self-container flex items-center">
-                      Already have an account?{" "}
-                      <div className="flex justify-between items-center">
-                        {" "}
-                        <Link href="/login" className="text-primary">
+                    <div className="self-container flex   items-center justify-between">
+                      <div className="w-full flex items-center">
+                        <p>Already have an account?</p>
+                        <Link href="/login" className="text-primary pl-[4px]">
                           Login
                         </Link>
-                        <Link href="/" className="text-gray-400 md:hidden ">
-                          Back to home
-                        </Link>
                       </div>
-                    </span>
+                      <Link href="/" className="text-gray-400 ">
+                        Back
+                      </Link>
+                    </div>
                     {(confirmation || codeExchangeError) && (
                       <>
                         <Alert className={confirmationAndErrorStyles}>

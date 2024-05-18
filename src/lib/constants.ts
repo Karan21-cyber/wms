@@ -167,3 +167,25 @@ export const pagelinks = [
 ];
 
 
+export const socialLinks = [
+  {
+    id: 1,
+    name: "Facebook",
+    link: "https://www.facebook.com",
+  },
+  {
+    id: 2,
+    name: "Twitter",
+    link: "https://www.twitter.com",
+  },
+  {
+    id: 3,
+    name: "Github",
+    link: "https://www.github.com",
+  },
+  {
+    id: 4,
+    name: "Linkedin",
+    link: "https://www.linkedin.com",
+  },
+];

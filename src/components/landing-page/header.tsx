@@ -1,19 +1,9 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+import { NavigationMenuLink } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
@@ -63,10 +53,11 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 const Header = () => {
-  const [path, setPath] = useState("#products");
   return (
     <header
-      className="p-4
+      className="px-4
+      py-[2px]
+      md:px-6
       flex
       justify-center
       items-center
@@ -77,30 +68,37 @@ const Header = () => {
         className="w-full flex gap-2
         justify-left items-center"
       >
-        <Image src={""} alt="space-world Logo" width={25} height={25} />
-        <span
-          className="font-semibold
-          dark:text-white
-        "
-        >
-          space-world.
-        </span>
+        <Image
+          src={"/logo.png"}
+          alt="space-world Logo"
+          className="cursor-pointer"
+          width={120}
+          height={50}
+        />
       </Link>
 
       <aside
         className="flex
         w-full
-        gap-2
+        gap-1
+        md:gap-2
         justify-end
+
       "
       >
         <Link href={"/login"}>
-          <Button variant="btn-secondary" className=" p-1 hidden sm:block">
-            Login
+          <Button
+            variant="btn-secondary"
+            className="p-1 whitespace-nowrap min-w-[60px] font-bold text-xs md:text-base md:px-4 border border-violet-500 text-violet-500 hover:bg-violet-600 hover:text-white"
+          >
+            Log in
           </Button>
         </Link>
         <Link href="/signup">
-          <Button variant="btn-primary" className="whitespace-nowrap">
+          <Button
+            variant="btn-primary"
+            className="whitespace-nowrap font-bold text-xs md:text-base bg-violet-500 text-white hover:bg-violet-600"
+          >
             Sign Up
           </Button>
         </Link>

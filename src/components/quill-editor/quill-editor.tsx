@@ -4,7 +4,6 @@
 import { useAppState } from "@/lib/providers/state-provider";
 import { File, Folder, workspace } from "@/lib/supabase/supabase.types";
 import { FcCollaboration } from "react-icons/fc";
-import _, { add, get } from "lodash";
 import React, {
   useCallback,
   useEffect,

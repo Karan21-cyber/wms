@@ -12,6 +12,7 @@ import {
   PRICING_PLANS,
   USERS,
   pagelinks,
+  socialLinks,
 } from "@/lib/constants";
 import { randomUUID } from "crypto";
 import { twMerge } from "tailwind-merge";
@@ -27,13 +28,13 @@ const HomePage = () => {
       <section
         className=" overflow-hidden
       px-4
-      sm:px-6
-      mt-10
-      sm:flex
-      sm:flex-col
-      gap-4
-      md:justify-center
-      md:items-center"
+      py-14
+      flex
+      flex-col
+      gap-8
+      justify-center
+      items-center
+      "
       >
         <TitleSection
           pill="✨ Your Workspace, Perfected"
@@ -42,12 +43,11 @@ const HomePage = () => {
         <div
           className="bg-white
           p-[2px]
-          mt-6
           rounded-xl
           bg-gradient-to-r
           from-primary
           to-brand-primaryBlue
-          sm:w-[300px]
+          
         "
         >
           <Button
@@ -63,16 +63,12 @@ const HomePage = () => {
           </Button>
         </div>
         <div
-          className="md:mt-[-90px]
-          sm:w-[60%]
-          w-[750px]
+          className="
           flex
+          md:max-w-[70vw]
           justify-center
           items-center
-          mt-[-40px]
           relative
-          sm:ml-0
-          ml-[-50px]
           shadow-2xl
           border-8
           rounded-2xl
@@ -84,7 +80,7 @@ const HomePage = () => {
           <Image
             src={Banner}
             alt="Application Banner"
-            className="object-cover  rounded-2xl"
+            className="object-cover rounded-2xl"
           />
           <div
             className="bottom-0
@@ -99,7 +95,11 @@ const HomePage = () => {
           ></div>
         </div>
       </section>
-      <section className="relative">
+
+      <section
+        className="relative
+      py-4"
+      >
         <div
           className="overflow-hidden
           flex
@@ -159,11 +159,14 @@ const HomePage = () => {
           ))}
         </div>
       </section>
+
       <section
-      id="feature"
+        id="feature"
         className="px-4
         sm:px-6
+        py-10
         flex
+        gap-8
         justify-center
         items-center
         flex-col
@@ -171,7 +174,7 @@ const HomePage = () => {
       "
       >
         <div
-          className="w-[30%]
+          className="w-[50%]
           blur-[120px]
           rounded-full
           h-32
@@ -187,13 +190,12 @@ const HomePage = () => {
           pill="Features"
         />
         <div
-          className="mt-10
-          max-w-[450px]
+          className="
+          md:max-w-[60vw]
           flex
           justify-center
           items-center
           relative
-          sm:ml-0
           rounded-2xl
           border-8
           border-gray-600
@@ -203,9 +205,7 @@ const HomePage = () => {
           <Image src={Cal} alt="Banner" className="rounded-2xl" />
         </div>
       </section>
-      <section 
-       id="testimonial"
-      className="relative">
+      <section id="testimonial" className="relative">
         <div
           className="w-full
           blur-[120px]
@@ -288,10 +288,11 @@ const HomePage = () => {
         </div>
       </section>
       <section
-       id="pricing"
-        className="mt-20
+        id="pricing"
+        className="
         px-4
         sm:px-6
+        py-20
       "
       >
         <TitleSection
@@ -407,7 +408,6 @@ const HomePage = () => {
       <section
         id="footer"
         className="footer-section
-        mt-20
     border-t  
     px-4
     sm:px-6
@@ -417,9 +417,10 @@ const HomePage = () => {
     bg-white
     flex
     justify-center
+    items-center
     "
       >
-        <div className="footer-wrapper w-[70%] lg:w-[50%]  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="footer-wrapper w-[70%] lg:w-[50%]   grid grid-cols-2 ">
           <div className="flex flex-col  w-full lg:w-[50%] gap-2 ">
             <h1 className="text-lg font-semibold ">Space World</h1>
             <div className="flex flex-col gap-2">
@@ -444,10 +445,10 @@ const HomePage = () => {
               )}
             </div>
           </div>
-          <div className="flex flex-col  w-full lg:w-[50%] gap-2 ">
+          <div className="flex flex-col   w-full lg:w-[50%] gap-2 ">
             <h1 className="text-lg font-semibold ">Social Links</h1>
             <div className="flex flex-col gap-2">
-              {pagelinks?.map(
+              {socialLinks?.map(
                 ({
                   id,
                   name,
@@ -458,32 +459,9 @@ const HomePage = () => {
                   link: string;
                 }) => (
                   <Link
-                    href={`/${link}`}
+                    href={`${link}`}
                     key={id}
-                    className="text-sm hover:underline "
-                  >
-                    {name}
-                  </Link>
-                )
-              )}
-            </div>
-          </div>
-          <div className="flex flex-col  w-full lg:w-[50%] gap-2 ">
-            <h1 className="text-lg font-semibold ">Service </h1>
-            <div className="flex flex-col gap-2">
-              {pagelinks?.map(
-                ({
-                  id,
-                  name,
-                  link,
-                }: {
-                  id: number;
-                  name: string;
-                  link: string;
-                }) => (
-                  <Link
-                    href={`/${link}`}
-                    key={id}
+                    target="_blank"
                     className="text-sm hover:underline "
                   >
                     {name}

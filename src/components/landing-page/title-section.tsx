@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface TitleSectionProps {
   title: string;
@@ -18,8 +18,8 @@ const TitleSection: React.FC<TitleSectionProps> = ({
         flex-col
         gap-4
         justify-center
-        items-start
-        md:items-center
+        items-center
+   
       "
       >
         <article
@@ -31,31 +31,33 @@ const TitleSection: React.FC<TitleSectionProps> = ({
           dark:to-brand-primaryPurple
         "
         >
-          <div
+          <h2
             className="rounded-full 
             px-3
             py-1
+            text-lg
             dark:bg-black"
           >
             {pill}
-          </div>
+          </h2>
         </article>
         {subheading ? (
           <>
-            <h2
-              className="text-left
+            <h3
+              className="
               text-3xl
               sm:text-5xl
               sm:max-w-[750px]
-              md:text-center
+              text-center
               font-semibold
+           
             "
             >
               {title}
-            </h2>
+            </h3>
             <p
               className="dark:text-washed-purple-700 sm:max-w-[450px]
-              md:text-center
+              text-center
             "
             >
               {subheading}
@@ -63,11 +65,11 @@ const TitleSection: React.FC<TitleSectionProps> = ({
           </>
         ) : (
           <h1
-            className=" text-left 
+            className="
             text-4xl
             sm:text-6xl
             sm:max-w-[850px]
-            md:text-center
+            text-center
             font-semibold
           "
           >
