@@ -212,8 +212,6 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     }
   }, []);
 
-  // console.log("quill wrapper", Quill);
-
   const restoreFileHandler = async () => {
     if (dirType === "file") {
       if (!folderId || !workspaceId) return;
