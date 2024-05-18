@@ -72,7 +72,7 @@ const HomePage = () => {
           shadow-2xl
           border-8
           rounded-2xl
-          border-gray-600 
+          border-violet-900 
           border-opacity-10
           overflow-hidden
         "
@@ -141,7 +141,7 @@ const HomePage = () => {
                   key={client.alt}
                   className=" relative
                     w-[200px]
-                    m-20
+                    m-16
                     shrink-0
                     flex
                     items-center
@@ -198,11 +198,15 @@ const HomePage = () => {
           relative
           rounded-2xl
           border-8
-          border-gray-600
+          border-violet-900
           border-opacity-10
         "
         >
-          <Image src={Cal} alt="Banner" className="rounded-2xl" />
+          <Image
+            src={Cal}
+            alt="Banner"
+            className="rounded-lg p-10 bg-violet-200"
+          />
         </div>
       </section>
       <section id="testimonial" className="relative">
@@ -225,6 +229,7 @@ const HomePage = () => {
           flex-col
           overflow-x-hidden
           overflow-visible
+          pb-16
         "
         >
           <TitleSection
@@ -233,6 +238,7 @@ const HomePage = () => {
             personal and professional productivity needs."
             pill="Testimonials"
           />
+
           {[...Array(2)].map((arr, index) => (
             <div
               key={randomUUID()}
@@ -249,11 +255,13 @@ const HomePage = () => {
               {USERS.map((testimonial, index) => (
                 <CustomCard
                   key={testimonial.name}
-                  className="w-[500px]
+                  className="
+                  md:w-[500px]
                   shrink-0s
                   rounded-xl
                   dark:bg-gradient-to-t
                   dark:from-border dark:to-background
+                  shadow-2xl
                 "
                   cardHeader={
                     <div
