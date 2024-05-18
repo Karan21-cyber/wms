@@ -43,7 +43,6 @@ import { useSocket } from "@/lib/providers/socket-provider";
 import { useSupabaseUser } from "@/lib/providers/supabase-user-provider";
 import { MessageComponents } from "./message-components";
 
-
 interface QuillEditorProps {
   dirDetails: File | Folder | workspace;
   fileId: string;
@@ -402,7 +401,6 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     socket.emit("create-room", fileId);
   }, [socket, quill, fileId]);
 
-
   const updateData = (data: any) => {
     const char = data?.[1]?.insert;
     if (char) {
@@ -434,9 +432,9 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       setSaving(true);
 
       const contents = quill.getContents();
-  
+
       updateData(delta?.ops);
-     
+
       setNewContent(oldDelta?.ops);
 
       //  Find content changes
@@ -486,7 +484,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     };
     quill.on("text-change", quillHandler);
     quill.on("selection-change", selectionChangeHandler(user.id));
-    
+
     const data = newData?.join("");
     setNewChangedData({ email: user?.email, data });
     setOldContent(newContent);

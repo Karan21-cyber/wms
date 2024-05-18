@@ -5,6 +5,7 @@ import { NextApiRequest } from "next";
 import * as dotenv from "dotenv";
 import { getURL } from "@/lib/utils";
 import e from "cors";
+import { createMessage } from "@/lib/supabase/queries";
 dotenv.config({ path: ".env" });
 
 export const config = {
@@ -42,13 +43,16 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
         s.to(fileId).emit("receive-cursor-move", range, fileId, cursorId);
       });
 
-      s.on("send-message", (message, fileId, email) => {
+      s.on("send-message", async (message, fileId, email, userId) => {
+        // save message to db
+        await createMessage(message, userId, fileId);
+
         console.log("server MESSAGE", message, message);
         console.log("server fileId", fileId);
         console.log("server userId", email);
 
         const data = {
-          email: email,
+          senderEmail: email,
           message: message,
           fileId: fileId,
         };

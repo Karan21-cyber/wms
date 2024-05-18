@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useSocket } from "@/lib/providers/socket-provider";
+import { createMessage, getMessages } from "@/lib/supabase/queries";
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -11,11 +13,22 @@ export const MessageComponents = ({
   user: any;
   fileId?: any;
 }) => {
-  console.log("fileId", fileId);
-  console.log("user", user);
   const { socket, isConnected } = useSocket();
   const [messagess, setMessagess] = useState<any>([]);
   const [message, setMessage] = useState<any>("");
+
+  const fetchMessages = async () => {
+    const { data, error } = await getMessages(fileId);
+    if (error) {
+      console.error("error", error);
+    }
+    console.log("messages from db", data);
+    setMessagess(data);
+  };
+
+  useEffect(() => {
+    fetchMessages();
+  }, []);
 
   useEffect(() => {
     if (socket === null || !fileId) return;
@@ -33,20 +46,24 @@ export const MessageComponents = ({
     return () => {
       socket.off("receive-message", socketHandler);
     };
-    
   }, [socket, message]);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (socket === null) return;
     setMessagess((prev: any) => [
       ...prev,
-      { email: user?.email, message, fileId },
+      { senderEmail: user?.email, message, fileId },
     ]);
-    socket.emit("send-message", message, fileId, user?.email);
+    socket.emit("send-message", message, fileId, user?.email, user?.id);
+    // const { error, data } = await createMessage(message, user?.id, fileId);
+
+    // if (error) {
+    //   console.error("Error creating message", error);
+    //   return;
+    // }
     setMessage("");
   };
 
-  console.log("messages", messagess);
   return (
     <div className="p-4 w-full relative flex flex-col gap-6 text-black bg-gray-300 rounded">
       <div className="sticky w-full">
@@ -55,13 +72,13 @@ export const MessageComponents = ({
         </p>
       </div>
 
-      <div className="h-[500px] overflow-y-scroll no-scrollbar bg-white text-black flex flex-col gap-4 rounded">
+      <div className="message-section-preview h-[500px] overflow-y-scroll no-scrollbar bg-white text-black flex flex-col gap-4 rounded">
         {messagess?.map((msg: any, index: number) => (
           <div
             key={index}
             className={clsx(
               " w-full flex p-2 ",
-              user?.email === msg?.email && "justify-end"
+              user?.email === msg?.senderEmail && "justify-end"
             )}
           >
             <div
@@ -75,11 +92,11 @@ export const MessageComponents = ({
               <p
                 className={clsx(
                   "text-xs text-start ",
-                  user?.email === msg?.email && "text-end"
+                  user?.email === msg?.senderEmail && "text-end"
                 )}
               >
                 <span className="px-2 py-[2px] rounded bg-blue-600 text-white">
-                  {msg?.email}
+                  {msg?.senderEmail}
                 </span>
               </p>
             </div>

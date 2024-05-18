@@ -149,6 +149,7 @@ export const pricesRelations = relations(prices, ({ one }) => ({
     references: [products.id],
   }),
 }));
+
 export const messages = pgTable("messages", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
