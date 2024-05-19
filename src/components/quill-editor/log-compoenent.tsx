@@ -11,18 +11,22 @@ export const LogComponent = ({ logList }: { logList: any[] }) => {
           </p>
         </div>
 
-        <div className="p-4 h-[500px] overflow-y-auto bg-white no-scrollbar ">
+        <div className="p-2 h-[500px] overflow-y-auto flex flex-col gap-2 bg-white no-scrollbar ">
           {logList?.map((log: any, index: number) => (
             <div
               key={index}
-              className="flex flex-col  flex-wrap border bg-violet-200"
+              className="flex p-1 flex-col flex-wrap border rounded "
             >
-              <p className="text-sm px-1 py-[2px] bg-gray-300 rounded ">
-                {log?.content}
+              <p className="text-sm px-1 py-[2px] bg-gray-300  ">
+                {log?.content === " "
+                  ? "Space Added"
+                  : log?.content === "\n"
+                  ? "Added new line" + log?.content
+                  : "Content Added : " + log?.content}
               </p>
-              <div className=" w-full flex gap-2 flex-wrap">
-                <span className="text-xs ">{log?.email}</span>
-                <span className="text-xs ">{log?.createdAt?.toString()}</span>
+              <div className=" w-full flex flex-col flex-wrap">
+                <span className="text-xs text-violet-600 ">{log?.email}</span>
+                <span className="text-xs text-violet-600">{log?.createdAt?.toString()}</span>
               </div>
             </div>
           ))}

@@ -527,6 +527,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     };
     // listen for changes from server
     socket.on("receive-changes", socketHandler);
+    fetchLogs();
     return () => {
       socket.off("receive-changes", socketHandler);
     };
