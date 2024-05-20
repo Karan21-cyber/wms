@@ -26,7 +26,9 @@ export const LogComponent = ({ logList }: { logList: any[] }) => {
               </p>
               <div className=" w-full flex flex-col flex-wrap">
                 <span className="text-xs text-violet-600 ">{log?.email}</span>
-                <span className="text-xs text-violet-600">{log?.createdAt?.toString()}</span>
+                <span className="text-xs text-violet-600">
+                  {log?.createdAt?.toString()}
+                </span>
               </div>
             </div>
           ))}
