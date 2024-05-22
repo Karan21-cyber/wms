@@ -45,6 +45,7 @@ import { useSupabaseUser } from "@/lib/providers/supabase-user-provider";
 import { MessageComponents } from "./message-components";
 import { RxActivityLog } from "react-icons/rx";
 import { LogComponent } from "./log-compoenent";
+import { set } from "lodash";
 
 interface QuillEditorProps {
   dirDetails: File | Folder | workspace;
@@ -673,12 +674,18 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
             {/* logs */}
             <div className="relative ">
               {logList?.length > 0 && (
-                <button className="mr-2" onClick={() => setShowLog(!showLog)}>
+                <button
+                  className="mr-2"
+                  onClick={() => {
+                    setShowLog(!showLog);
+                    setShowChat(false);
+                  }}
+                >
                   <RxActivityLog size={24} className="text-violet-900" />
                 </button>
               )}
               {showLog && (
-                <div className="absolute top-8 right-3 w-[500px] z-[99]">
+                <div className="absolute top-8 right-3 w-[500px] z-[999]">
                   <LogComponent logList={logList} />
                 </div>
               )}
@@ -686,11 +693,17 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
 
             {/* messages */}
             <div className="relative ">
-              <button className="mr-2" onClick={() => setShowChat(!showChat)}>
+              <button
+                className="mr-2"
+                onClick={() => {
+                  setShowChat(!showChat);
+                  setShowLog(false);
+                }}
+              >
                 <FcCollaboration size={30} />
               </button>
               {showChat && (
-                <div className="absolute top-8 right-3 w-[500px] z-[99]">
+                <div className="absolute top-8 right-3 w-[500px] z-[999]">
                   <MessageComponents user={user} fileId={fileId} />
                 </div>
               )}
